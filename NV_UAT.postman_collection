@@ -1,0 +1,578 @@
+{
+	"info": {
+		"_postman_id": "84b9b226-ded0-438b-b3b0-d6276bb80938",
+		"name": "NV  UAT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30290947",
+		"_collection_link": "https://red-crater-148206.postman.co/workspace/b575dea6-c17d-401c-8d02-0d87a0f67ae0/collection/30290947-84b9b226-ded0-438b-b3b0-d6276bb80938?action=share&source=collection_link&creator=30290947"
+	},
+	"item": [
+		{
+			"name": "Authorization",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"var jsonData = pm.response.json();",
+											"postman.setEnvironmentVariable(\"token\",\"jwt \" + jsonData.token);",
+											"pm.environment.set(\"username\", jsonData.username);",
+											"pm.environment.set(\"id\", jsonData.id);",
+											"pm.environment.set(\"email\", jsonData.email);",
+											"pm.environment.set(\"user_type\", jsonData.user_type);",
+											"pm.environment.set(\"company_id\", jsonData.company_id);",
+											"pm.environment.set(\"subdomain\", jsonData.subdomain);",
+											"pm.environment.set('is_prime_admin', jsonData.is_prime_admin);",
+											"pm.environment.set('is_email_verified',jsonData.is_email_verified)",
+											"pm.environment.set('last_visited_page',jsonData.last_visited_page)",
+											"pm.environment.set('company_customer',jsonData.company_customer)",
+											"pm.environment.set(\"subdomain\",jsonData.subdomain)",
+											"pm.environment.set(\"first_name\",jsonData.first_name)",
+											"pm.environment.set(\"last_name\",jsonData.last_name)",
+											"",
+											"pm.test(\"id in response\", function () {",
+											"    pm.expect(jsonData).to.have.property('id');",
+											"});",
+											"pm.test(\"email is correct\", function () {",
+											"    pm.expect(jsonData.email).to.eql(environment.email);",
+											"});",
+											"pm.test(\"first name correct\", function () {",
+											"    pm.expect(jsonData.first_name).to.eql(environment.first_name);",
+											"});",
+											"pm.test(\"last name correct\", function () {",
+											"    pm.expect(jsonData.last_name).to.eql(environment.last_name);",
+											"});",
+											"pm.test(\"user type correct\", function () {",
+											"    pm.expect(jsonData.user_type).to.eql(environment.user_type);",
+											"});",
+											"pm.test(\"prime admin correct\", function () {",
+											"    pm.expect(jsonData.is_prime_admin).to.eql(environment.is_prime_admin);",
+											"});",
+											"pm.test(\"username correct\", function () {",
+											"    pm.expect(jsonData.username).to.eql(environment.username);",
+											"});",
+											"pm.test(\"email ferified correct\", function () {",
+											"    pm.expect(jsonData.is_email_verified).to.eql(environment.is_email_verified);",
+											"});",
+											"pm.test(\"last_visited_page correct\", function () {",
+											"    pm.expect(jsonData.last_visited_page).to.eql(environment.last_visited_page);",
+											"});",
+											"pm.test(\"company customer correct\", function () {",
+											"    pm.expect(jsonData.company_customer).to.eql(environment.company_customer);",
+											"});",
+											"pm.test(\"company id correct\", function () {",
+											"    pm.expect(jsonData.company_id).to.eql(environment.company_id);",
+											"});",
+											"pm.test(\"subdomain correct\", function () {",
+											"    pm.expect(jsonData.subdomain).to.eql(environment.subdomain);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"gazal\",\r\n    \"password\": \"gazal@123\",\r\n    \"company_id\" : 1,\r\n    \"is_booking\" : 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/login/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"login",
+										""
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login(incorrect credentials)",
+					"item": [
+						{
+							"name": "Login(incorrect credentials)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"username\",\"{{RandomUserName}}\")\r",
+											"pm.collectionVariables.set(\"password\", \"{{RandomPassword}}\")"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"var jsonData = JSON.parse (responseBody);\r",
+											"postman.setEnvironmentVariable (\"token\", jsonData.token)\r",
+											"pm.test(\"The username or password you entered is incorrect.\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonBody();\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"company_id\": 1,\r\n    \"is_booking\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/login/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"login",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Create reservation",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"facility\": 11,\r\n    \"company_customer\": 23295,\r\n    \"guest_reservation\": [\r\n        {\r\n            \"id\": null,\r\n            \"guest\": 19159,\r\n            \"reservation_type\": 25,\r\n            \"holding_room\": null,\r\n            \"in_holding_room\": false,\r\n            \"room\": 914,\r\n            \"linked_room\": [\r\n                {\r\n                    \"room\": 914,\r\n                    \"name\": \"R1S1\",\r\n                    \"start_date\": \"2024-05-17T09:00:00+03:00\",\r\n                    \"end_date\": \"2024-05-18T09:00:00+03:00\"\r\n                }\r\n            ],\r\n            \"room_standard\": 22,\r\n            \"expected_checkin\": \"2024-05-17T09:00:00+03:00\",\r\n            \"expected_checkout\": \"2024-05-18T09:00:00+03:00\",\r\n            \"actual_checkin\": null,\r\n            \"actual_checkout\": null,\r\n            \"guest_food\": {\r\n                \"id\": null,\r\n                \"description\": \"\",\r\n                \"guest_feeding\": [],\r\n                \"guest_treat\": []\r\n            },\r\n            \"guest_service\": [],\r\n            \"guest_belonging\": [],\r\n            \"medication_details\": [],\r\n            \"estimated_cost\": 100,\r\n            \"status\": null\r\n        }\r\n    ],\r\n    \"estimated_cost\": 100,\r\n    \"status\": 1,\r\n    \"note\": \"\",\r\n    \"reserve_anyway\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://envy-uat-lb-80498226.us-east-2.elb.amazonaws.com/reservation/api/v1/reservations",
+							"protocol": "http",
+							"host": [
+								"envy-uat-lb-80498226",
+								"us-east-2",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"reservation",
+								"api",
+								"v1",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List of reservations",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "company-id",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "http://envy-uat-lb-80498226.us-east-2.elb.amazonaws.com/reservation/api/v1/appointment/",
+							"protocol": "http",
+							"host": [
+								"envy-uat-lb-80498226",
+								"us-east-2",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"reservation",
+								"api",
+								"v1",
+								"appointment",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update reservation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNDIsInVzZXJuYW1lIjoiR2F6YWwiLCJleHAiOjE3MDc5MTk3NTIsImVtYWlsIjoiZ2F6YWxAZmlub2l0LmNvbSJ9.oiXEdzK0L-scf9pHm-Kr_O5502bM6oVu2V9Vq4TwJTk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"facility\": 11,\r\n    \"company_customer\": 22144,\r\n    \"guest_reservation\": [\r\n        {\r\n            \"id\": 3737,\r\n            \"guest\": 17451,\r\n            \"reservation_type\": 25,\r\n            \"holding_room\": null,\r\n            \"in_holding_room\": false,\r\n            \"room\": 247,\r\n            \"room_standard\": 22,\r\n            \"expected_checkin\": \"2024-01-23T00:00:00+02:00\",\r\n            \"expected_checkout\": \"2024-01-27T00:00:00+02:00\",\r\n            \"actual_checkin\": null,\r\n            \"actual_checkout\": null,\r\n            \"guest_food\": {\r\n                \"id\": 3728,\r\n                \"description\": \"\",\r\n                \"guest_feeding\": [],\r\n                \"guest_treat\": []\r\n            },\r\n            \"guest_service\": [],\r\n            \"guest_belonging\": [],\r\n            \"medication_details\": [],\r\n            \"estimated_cost\": 280,\r\n            \"status\": 1,\r\n            \"linked_room\": [\r\n                {\r\n                    \"room\": 247,\r\n                    \"start_date\": \"2024-01-22T22:00:00.000Z\",\r\n                    \"end_date\": \"2024-01-26T22:00:00.000Z\"\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"estimated_cost\": 280,\r\n    \"status\": 1,\r\n    \"note\": \"\",\r\n    \"reserve_anyway\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reservations/3466/?Company-ID=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reservations",
+								"3466",
+								""
+							],
+							"query": [
+								{
+									"key": "Company-ID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointments",
+			"item": [
+				{
+					"name": "list of appointments",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Company-Id",
+								"value": "{{company_id}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl2}}/appointment/?page=1&page_size=15&department=31",
+							"host": [
+								"{{baseurl2}}"
+							],
+							"path": [
+								"appointment",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "15"
+								},
+								{
+									"key": "department",
+									"value": "31"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Create customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"first_name\", \"{{$randomFirstName}}\");\r",
+									"pm.collectionVariables.set(\"last_name\", \"{{$randomLastname}}\");\r",
+									"pm.collectionVariables.set(\"phone_number\", \"{{$randomInt}}\");\r",
+									"pm.collectionVariables.set(\"end_of_email\", \"{{$randomInt}}\");\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"facility\": [\r\n        11\r\n    ],\r\n    \"status\": \"1\",\r\n    \"primary_customer\": {\r\n        \"first_name\": \"Tewe\",\r\n        \"last_name\": \"werwerwer\",\r\n        \"pronouns\": \"HE\",\r\n        \"contacts\": [\r\n            {\r\n                \"phone_number\": \"23423523523\",\r\n                \"country_code\": 1,\r\n                \"is_primary\": true\r\n            }\r\n        ],\r\n        \"email\": \"siriusqaqc+0909@gmail.com\",\r\n        \"address\": [\r\n            {\r\n                \"address_line1\": \"tests 23\",\r\n                \"address_line2\": \"\",\r\n                \"country\": 1,\r\n                \"state\": 4126,\r\n                \"city\": 50489,\r\n                \"zip_code\": 37142,\r\n                \"is_primary\": true\r\n            }\r\n        ]\r\n    },\r\n    \"secondary_customer\": {\r\n        \"first_name\": \"\",\r\n        \"last_name\": \"\",\r\n        \"contacts\": [],\r\n        \"email\": \"\",\r\n        \"sameAddress\": false,\r\n        \"address\": []\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/customer/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customer",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Company-id",
+						"value": "1"
+					}
+				],
+				"url": {
+					"raw": "http://envy-uat-lb-80498226.us-east-2.elb.amazonaws.com/reservation/api/v1/appointment/2330",
+					"protocol": "http",
+					"host": [
+						"envy-uat-lb-80498226",
+						"us-east-2",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"reservation",
+						"api",
+						"v1",
+						"appointment",
+						"2330"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Accept",
+			"value": "applcation/json",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "facility",
+			"value": "11",
+			"type": "string"
+		},
+		{
+			"key": "company_customer",
+			"value": "23295",
+			"type": "string"
+		},
+		{
+			"key": "reservation_type",
+			"value": "25",
+			"type": "string"
+		},
+		{
+			"key": "username_var",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "first_name",
+			"value": ""
+		},
+		{
+			"key": "last_name",
+			"value": ""
+		},
+		{
+			"key": "phone_number",
+			"value": ""
+		},
+		{
+			"key": "end_of_email",
+			"value": ""
+		}
+	]
+}
